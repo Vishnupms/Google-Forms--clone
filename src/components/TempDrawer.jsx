@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu'
-import { IconButton, List, ListItem, makeStyles } from '@mui/material'
+import { IconButton } from '@mui/material'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Drawer from '@mui/material/Drawer'
-import ListItemText from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
+import {FiSettings} from 'react-icons/fi'
+import {BsQuestionCircle} from 'react-icons/bs'
+import './drawer.css'
 
-const useStyles = makeStyles({
-    listItem:{
-        marginLeft:"200px",fontSize:"14px",fontWeight:"500",color:"grey"
-    }
-})
 
 function TempDrawer() {
-    const classes = useStyles()
+  
     const [state,setState] = useState({
         left:false
     })
@@ -37,6 +37,41 @@ function TempDrawer() {
 
            </List>
            <Divider />
+           <List style = {{marginLeft:"08px",marginRight:"8px",marginTop:"15px"}}>
+            <ListItem className='list_item'>
+                <img src='' alt='' style={{height:"20px",width:"20px"}}/>
+                <div style={{ marginLeft:"20px",fontSize:"14px",fontWeight:"500",color:"grey"}}>Docs</div>
+            </ListItem>
+            <ListItem className='list_item'>
+                <img src='' alt='' style={{height:"20px",width:"20px"}}/>
+                <div style={{ marginLeft:"20px",fontSize:"14px",fontWeight:"500",color:"grey"}}>Sheets</div>
+            </ListItem><ListItem className='list_item'>
+                <img src='' alt='' style={{height:"20px",width:"20px"}}/>
+                <div style={{ marginLeft:"20px",fontSize:"14px",fontWeight:"500",color:"grey"}}>Slides</div>
+            </ListItem><ListItem className='list_item'>
+                <img src='' alt='' style={{height:"20px",width:"20px"}}/>
+                <div style={{ marginLeft:"20px",fontSize:"14px",fontWeight:"500",color:"grey"}}>Forms</div>
+            </ListItem>
+           </List>
+           <Divider />
+           <List style={{marginLeft:"08px",marginRight:"08px",marginTop:"15px"}}>
+            <ListItem className='list_item'>
+                <FiSettings />
+                <div style={{marginLeft:"20px",fontSize:"14px"}}>Settings</div>
+            </ListItem>
+            <ListItem className='list_item'>
+                <BsQuestionCircle />
+                <div style={{marginLeft:"20px",fontSize:"14px",fontWeight:"500",color:"grey"}}> Help & Feedback</div>
+            </ListItem>
+           </List>
+           <Divider />
+           <List style={{marginLeft:"08px",marginRight:"08px",marginTop:"15px"}}>
+            <ListItem className='list_item'>
+            <img src='' alt='' style={{height:"20px",width:"20px"}}/>
+            <div style={{marginLeft:"20px",fontSize:"14px"}}>Drive</div>
+            </ListItem>
+            </List>
+            <Divider />
         </div>
     )
   return (
