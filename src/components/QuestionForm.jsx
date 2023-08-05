@@ -27,21 +27,21 @@ import {
 } from "@mui/material";
 import { BsFile, BsTrash } from "react-icons/bs";
 import { FcRightUp } from "react-icons/fc";
-import { DragIndicator } from "@mui/icons-material";
-import {DragDropContext,Droppable,Draggable} from 'react-beautiful-dnd'
 import "./questionform.css";
+import axios from "axios";
+import FormInstance from "../Instances/formInstance";
+
 
 
 function QuestionForm() {
+  const [name, setName] = useState(""); // State for the form name
+  const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([
       {
-        questionText: "which is capital of India ?",
+        questionText: "Question",
         questionType: "radio",
         options: [
-          { optionText: "Bengaluru" },
-          { optionText: "Bhutan" },
-          { optionText: "Hubbli" },
-          { optionText: "Malesia" },
+          { optionText: "Option 1" },
         ],
         answer:false,
         answerKey:"",
@@ -50,23 +50,39 @@ function QuestionForm() {
         required: false,
       },
     ]);
-
+    const handleFormSubmit = async () => {
+      try {
+      console.log("first",questions)
+        // Make a POST request to your backend endpoint to save the form data
+        const response = await axios.post("http://localhost:8000/api/form/submitForm", {
+          questions,
+          name, // Pass the name state to the backend
+          description, // Pass the description state to the backend
+          formType: "anonymous", // Replace with the form type
+        });
+  
+        console.log("Form data saved successfully:", response.data);
+        // Do something after successful form submission, e.g., redirect to a success page.
+      } catch (error) {
+        console.error("Error saving form data:", error);
+      }
+    };
+  
     function changeQuestion(text,i){
       var newQuestion =[...questions];
       newQuestion[i].questionText = text
       setQuestions(newQuestion)
-      console.log(newQuestion)
+ 
     }
     function changeOptionValue(text,i,j){
       var optionsQuestion = [...questions]
       optionsQuestion[i].options[j].optionText = text
       setQuestions(optionsQuestion)
-      console.log(optionsQuestion)
+   
     }
 
     function addQuestionType(i,type){
       let qs =[...questions];
-      console.log(type)
       qs[i].questionType = type
       setQuestions(qs)
     }
@@ -77,13 +93,13 @@ function QuestionForm() {
         removeOptionQuestion[i].options.splice(j,1)
 
         setQuestions(removeOptionQuestion)
-        console.log(i+'___' +j)
+      
       }
     }
     function addOption(i){
       let optionsOfQuestion = [...questions];
       if(optionsOfQuestion[i].options.length <5){
-        optionsOfQuestion[i].options.push({optionText:"Option" + (optionsOfQuestion[i].options.length + 1)})
+        optionsOfQuestion[i].options.push({optionText:"Option " + (optionsOfQuestion[i].options.length + 1)})
       }
       else{
         console.log("Max 5 options")
@@ -107,7 +123,7 @@ function QuestionForm() {
     function requiredQuestion(i){
       let reqQuestion = [...questions]
       reqQuestion[i].required = ! reqQuestion[i].required
-      console.log(reqQuestion[i].required+" "+i)
+
       setQuestions(reqQuestion)
     }
     function addMoreQuestionField() {
@@ -147,14 +163,14 @@ function QuestionForm() {
       Questions[qno].answerKey = ans
 
       setQuestions(Questions)
-      console.log(qno + " "+ans)
+     
     }
 
     function setOptionPoints(points,qno){
       let Questions = [...questions];
       Questions[qno].points = points
       setQuestions(Questions)
-      console.log(qno + " "+points)
+     
     }
     function doneAnswer(i){
       let answerOfQuestion = [...questions];
@@ -168,6 +184,7 @@ function QuestionForm() {
       setQuestions(answerOfQuestion)
       
     }
+  
     // function onDragEnd(result){
     //   if(!result.destination){
     //     return
@@ -191,6 +208,7 @@ function QuestionForm() {
     
     function questionsUI() {
       return questions.map((ques, i) => (
+        <>
         <Accordion
           key={i}
           expanded={questions[i].open}
@@ -363,8 +381,11 @@ function QuestionForm() {
           </div>):" "} 
 
           </div>
+          
         </Accordion>
+        </>
       ));
+      
     }
   
     return (
@@ -378,13 +399,18 @@ function QuestionForm() {
                 className="question_form_top_name"
                 style={{ color: "black" }}
                 placeholder="Untitled document"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <input
                 type="text"
                 className="question_form_top_desc"
                 placeholder="Form description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
+            
           </div>
           {/* <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
@@ -400,6 +426,7 @@ function QuestionForm() {
               </DragDropContext> */}
               {questionsUI()}
         
+              <Button onClick={handleFormSubmit} style={{marginTop:"4px"}} variant='contained' color='primary' href='#contained-buttons'>Submit Form</Button>
         </div>
       </div>
     );
